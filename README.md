@@ -22,7 +22,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Fundamentos
+```ruby
+# Connect with GoogleDrive
+session = GoogleDrive::Session.from_config("config.json")
+ws = session.spreadsheet_by_key("<YOUR_SPREEDSHEET_KEY>").worksheets[0]
+
+source = Fundamenthus::Source::Fundamentus.new(ws)
+source.fetch_stocks
+```
+
 
 ## Development
 
