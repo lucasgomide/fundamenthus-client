@@ -1,62 +1,52 @@
-require 'google_drive'
 require 'pry'
 
 module Fundamenthus
   module Source
     module StatusInvest
       class Crawler
-        attr_accessor :ws, :client
+        attr_accessor :storage, :client
 
         MAX_PAGE = 8
 
-        def initialize(ws, client = Client.new)
-          @ws = ws
+        def initialize(storage = nil, client = Client.new)
+          @storage = storage
           @client = client
         end
 
         def fetch_stocks
-          results = []
+          [].tap do |results|
+            (1..MAX_PAGE).each do |page|
+              begin
+                response = @client.stock_links(page)
 
-          (1..MAX_PAGE).each do |page|
-            begin
-              response = @client.stock_links(page)
+                break if response.status.to_i != 200
 
-              break if response.status.to_i != 200
+                JSON.parse(response.body_str).each do |company|
+                  print "\r#{page} pages parsed - #{results.count} items fetched"
 
-              JSON.parse(response.body_str).each do |company|
-                print "\r#{page / MAX_PAGE.to_f * 100}% complete - #{results.count} items fetched"
+                  response = @client.stock_page(company['url'])
+                  result = parse_stock_page(response)
+                  result['Ação'] = company['url'].split('/').last.upcase
+                  result['Empresa'] = company['companyName']
 
-                response = @client.stock_page(company['url'])
-                result = parse_stock_page(response)
-                result['Ação'] = company['url'].split('/').last.upcase
-                result['Empresa'] = company['companyName']
-
-                results << result
+                  results << result
+                end
+              rescue => e
+                puts e.message
+                next
               end
-            rescue => e
-              puts e.message
-              next
+            end
+
+            results = results.flatten
+
+            if storage
+              puts "\nSaving results to #{storage.class}.."
+              storage.create(results)
             end
           end
-          save_to_ws(results)
         end
 
         private
-
-        def save_to_ws(results)
-          results = results.flatten
-          results.first.keys.each_with_index do |key, index|
-            ws[1, index + 1] = key
-          end
-
-          results.each_with_index do |item, head|
-            item.values.each_with_index do |key, index|
-              ws[head + 2, index + 1] = key
-            end
-          end
-
-          ws.save
-        end
 
         def parse_stock_page(response)
           doc = Nokogiri::HTML(response.body)
