@@ -4,12 +4,11 @@ module Fundamenthus
   module Source
     module Fundamentos
       class Crawler
-        attr_accessor :storage, :client
+        attr_accessor :client
 
         PAGE_LIMIT = 100
 
-        def initialize(storage = nil, client = Client.new)
-          @storage = storage
+        def initialize(client = Client.new)
           @client = client
         end
 
@@ -31,14 +30,7 @@ module Fundamenthus
                 puts e.message
                 next
               end
-            end
-
-            results = results.flatten
-
-            if storage
-              puts "\nSaving results to #{storage.class}.."
-              storage.create(results)
-            end
+            end.flatten
           end
         end
 

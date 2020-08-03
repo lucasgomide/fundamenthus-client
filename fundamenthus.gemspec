@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["lucasgomide"]
   spec.email         = ["lucaslg200@gmail.com"]
 
-  spec.summary       = %q{Get & Store B3 stocks data}
+  spec.summary       = %q{Get B3 stocks data}
   spec.description   = %q{}
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")

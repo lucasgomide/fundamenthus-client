@@ -2,8 +2,7 @@ module Fundamenthus
   module Source
     module B3
       class Crawler
-        include Fundamenthus::Source::Storage
-        attr_accessor :storage, :client
+        attr_accessor :client
 
         HEADS = {
           'Tipo de Ativo' => :tipo_ativo,
@@ -29,8 +28,7 @@ module Fundamenthus
           preco_unidade: :interger_parser
         }
 
-        def initialize(storage = nil, client = Client.new)
-          @storage = storage
+        def initialize(client = Client.new)
           @client = client
         end
 
