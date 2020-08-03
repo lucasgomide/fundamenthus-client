@@ -1,5 +1,3 @@
-
-
 module Fundamenthus
   module Source
     module Fundamentos
@@ -15,21 +13,18 @@ module Fundamenthus
         def fetch_stocks
           [].tap do |results|
             (1..PAGE_LIMIT).each do |page|
-              begin
-                print "\r#{page} pages parsed - #{results.count} items fetched"
-                sleep(2)
+              print "\r#{page} pages parsed - #{results.count} items fetched"
+              sleep(2)
 
-                response = @client.segment_page(page)
+              response = @client.segment_page(page)
 
-                tickers = parser_stocks_name(response)
+              tickers = parser_stocks_name(response)
 
-                next if tickers.empty?
+              next if tickers.empty?
 
-                results.push(stock_details(tickers))
-              rescue => e
-                puts e.message
-                next
-              end
+              results.push(stock_details(tickers))
+            rescue StandardError => e
+              puts e.message
             end.flatten
           end
         end
@@ -49,9 +44,10 @@ module Fundamenthus
               item = {}
               labels = []
               data = []
-              doc.css(".w728").each do |table|
+              doc.css('.w728').each do |table|
                 table.css('tr td').each do |td|
                   next if td.content.empty?
+
                   labels << td.content.strip.gsub(/\?/, '') if td.classes.include?('label')
                   data << td.content.strip if td.classes.include?('data')
                 end
