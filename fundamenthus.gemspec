@@ -22,7 +22,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'curb', '~> 0.9'
-  spec.add_dependency 'google_drive', '<4'
   spec.add_dependency 'nokogiri', '~> 1.6'
 
   spec.add_development_dependency 'pry'
