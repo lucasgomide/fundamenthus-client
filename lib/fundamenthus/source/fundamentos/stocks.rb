@@ -1,7 +1,7 @@
 module Fundamenthus
   module Source
     module Fundamentos
-      class Crawler
+      class Stocks
         attr_accessor :client
 
         PAGE_LIMIT = 100
@@ -10,7 +10,7 @@ module Fundamenthus
           @client = client
         end
 
-        def fetch_stocks
+        def stocks
           [].tap do |results|
             (1..PAGE_LIMIT).each do |page|
               print "\r#{page} pages parsed - #{results.count} items fetched"
@@ -25,8 +25,8 @@ module Fundamenthus
               results.push(stock_details(tickers))
             rescue StandardError => e
               puts e.message
-            end.flatten
-          end
+            end
+          end.flatten
         end
 
         private

@@ -1,7 +1,7 @@
 module Fundamenthus
   module Source
     module StatusInvest
-      class Crawler
+      class Stocks
         attr_accessor :client
 
         MAX_PAGE = 8
@@ -10,7 +10,7 @@ module Fundamenthus
           @client = client
         end
 
-        def fetch_stocks
+        def stocks
           [].tap do |results|
             (1..MAX_PAGE).each do |page|
               response = @client.stock_links(page)
@@ -30,8 +30,8 @@ module Fundamenthus
             rescue StandardError => e
               puts e.message
               next
-            end.flatten
-          end
+            end
+          end.flatten
         end
 
         private

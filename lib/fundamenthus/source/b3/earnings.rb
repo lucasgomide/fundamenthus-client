@@ -5,7 +5,7 @@ require 'date'
 module Fundamenthus
   module Source
     module B3
-      class Crawler
+      class Earnings
         attr_accessor :client
 
         HEADS = {
@@ -36,7 +36,7 @@ module Fundamenthus
           @client = client
         end
 
-        def fetch_earnings
+        def earnings
           [].tap do |results|
             companies.each do |company|
               print "\r#{results.count} earnings fetched"
@@ -45,7 +45,7 @@ module Fundamenthus
 
               results << earnings
             end
-          end
+          end.flatten
         end
 
         def parse_company_earning(company)
