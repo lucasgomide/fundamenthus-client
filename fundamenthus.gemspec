@@ -6,9 +6,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ['lucasgomide']
   spec.email         = ['lucaslg200@gmail.com']
 
-  spec.summary       = 'Get B3 stocks data'
-  spec.description   = ''
-  spec.license       = 'MIT'
+  spec.summary       = 'Export brazilian stock data from the best ones stock analysis websites'
+  spec.description   = "Keep updated about the stocks' fundamentals is essential. This gem export
+  brazilian stock data from the best ones stock analysis websites in JSON format"
+  spec.license = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
   # Specify which files should be added to the gem when it is released.
