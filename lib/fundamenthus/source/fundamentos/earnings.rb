@@ -5,8 +5,7 @@ module Fundamenthus
     module Fundamentos
       class Earnings
         def earnings
-          logger = Logger.new(STDOUT)
-          logger.info(__method__) { 'TODO: Crawler not implemented' }
+          Fundamenthus.logger.info(__method__) { 'TODO: Crawler not implemented' }
           []
         end
       end

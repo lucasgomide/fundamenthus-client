@@ -6,11 +6,15 @@ module Fundamenthus
   module Source
     module B3
       def self.stocks
-        Stocks.new.stocks
+        Fundamenthus::Source::Result.new(
+          Stocks.new.stocks
+        )
       end
 
       def self.earnings
-        Earnings.new.earnings
+        Fundamenthus::Source::Result.new(
+          Earnings.new.earnings
+        )
       end
     end
   end
