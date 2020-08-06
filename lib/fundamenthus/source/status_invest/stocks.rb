@@ -2,6 +2,8 @@ module Fundamenthus
   module Source
     module StatusInvest
       class Stocks
+        include Fundamenthus::Source::Fields
+
         attr_accessor :client
 
         MAX_PAGE = 8
@@ -22,8 +24,8 @@ module Fundamenthus
 
                 response = @client.stock_page(company['url'])
                 result = parse_stock_page(response)
-                result['Ação'] = company['url'].split('/').last.upcase
-                result['Empresa'] = company['companyName']
+                result['codigo'] = company['url'].split('/').last.upcase
+                result['empresa'] = company['companyName']
 
                 results << result
               end
@@ -50,22 +52,28 @@ module Fundamenthus
         end
 
         def apply_normalizer(key, value, result)
-          case key.downcase
-          when 'dividend yield'
-            result['Dividend Yield Ult 12 Meses (R$)'] = value[-1]
+          case key
+          when 'dividend_yield'
+            result['dividend_yield_12_meses'] = value[-1]
             result[key] = value[0..1].join(' ')
-          when 'valorização (12m)'
+          when 'valorização_12m'
             result[key] = value[0]
           when
-              'min. 52 semanas',
-              'máx. 52 semanas'
+              'min_52_semanas',
+              'máx_52_semanas'
             result[key] = value[-1..].join(' ')
           when
-              'liq. méd. diária',
-              'part. ibov'
+              'liq_med_diaria',
+              'part_ibov'
             result[key] = value[-2..].join(' ')
-          when 'valor atual'
+          when 'valor_atual'
             result[key] = value[0..1].join(' ')
+          when 'ano_passado',
+            'ano_atual',
+            'comparação',
+            'provisionado',
+            'comparação_provisionado'
+            result["dividendos_#{key}"] = value.join(' ')
           else
             result[key] = value.is_a?(Array) ? value.join(' ') : value
           end
@@ -76,7 +84,7 @@ module Fundamenthus
           return if reject_content(content[0])
 
           apply_normalizer(
-            content[0],
+            normalize_field(content[0]),
             content[1..].reject(&method(:reject_content)),
             result
           )

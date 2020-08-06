@@ -2,6 +2,8 @@ module Fundamenthus
   module Source
     module Fundamentos
       class Stocks
+        include Fundamenthus::Source::Fields
+
         attr_accessor :client
 
         PAGE_LIMIT = 100
@@ -54,7 +56,7 @@ module Fundamenthus
               end
 
               labels.each_with_index do |label, index|
-                item[label] = data[index]
+                item[normalize_field(label)] = data[index]
               end
               items << item
             end
