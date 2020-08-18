@@ -12,7 +12,7 @@ module Fundamenthus
           @client = client
         end
 
-        def stocks
+        def collect
           [].tap do |results|
             (1..MAX_PAGE).each do |page|
               response = @client.stock_links(page)

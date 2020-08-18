@@ -12,7 +12,7 @@ module Fundamenthus
           @client = client
         end
 
-        def stocks
+        def collect
           [].tap do |results|
             (1..PAGE_LIMIT).each do |page|
               print "\r#{page} pages parsed - #{results.count} items fetched"

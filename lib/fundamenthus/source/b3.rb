@@ -7,13 +7,13 @@ module Fundamenthus
     module B3
       def self.stocks
         Fundamenthus::Source::Result.new(
-          Stocks.new.stocks
+          Stocks.new.collect
         )
       end
 
       def self.earnings
         Fundamenthus::Source::Result.new(
-          Earnings.new.earnings
+          Earnings.new.collect
         )
       end
     end

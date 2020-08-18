@@ -36,10 +36,10 @@ module Fundamenthus
           @client = client
         end
 
-        def earnings
+        def collect
           [].tap do |results|
             companies.each do |company|
-              print "\r#{results.count} earnings fetched"
+              print "\r#{results.count} companies fetched"
               earnings = parse_company_earning(company)
               next if earnings.nil? || earnings.empty?
 
@@ -83,12 +83,12 @@ module Fundamenthus
         def earning_parser(response, company)
           document = Nokogiri::HTML(response.body).css('.MasterTable_SiteBmfBovespa')
           head_titles = HEADS.keys
-          default_data = { 'Empresa' => company['NOME'], 'Código' => company['stickers'] }
+          default_data = { 'empresa' => company['NOME'], 'papel' => company['stickers'] }
           [].tap do |result|
             data = {}
             document.css('.MasterTable_SiteBmfBovespa tbody tr').each do |tr|
               tr.css('td').each_with_index do |td, index|
-                data[HEADS[head_titles[index]]] = send(APPLY[HEADS[head_titles[index]]] || :default_parser, td.content)
+                data[HEADS[head_titles[index]].to_s] = send(APPLY[HEADS[head_titles[index]]] || :default_parser, td.content)
               end
               result << data.merge(default_data)
             end
@@ -100,7 +100,7 @@ module Fundamenthus
           return value if date_group.nil?
 
           date = date_group.to_a[1, 3].map(&:to_i)
-          Date.new(date[2], date[1], date[0])
+          Date.new(date[2], date[1], date[0]).to_s
         end
 
         def float_parser(value)
